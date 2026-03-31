@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo lo dicho es dicho por alguien — Alexander Orejarena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --paper: #2b2a31;
+  --paper-light: #33323a;
+  --ink: #D3DAD9;
+  --ink-soft: #b0b5b4;
+  --ink-muted: #7e8382;
+  --accent: #a08080;
+  --accent-light: #b89a9a;
+  --accent-bg: rgba(160, 128, 128, 0.1);
+  --rule: #44444E;
+  --rule-light: #3d3c45;
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Source Sans 3', 'Helvetica Neue', sans-serif;
+  --measure: 720px;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 17px;
+  background: var(--paper);
+}
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+a:hover { border-bottom-color: var(--accent); }
+
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 1px 16px rgba(0,0,0,0.25); }
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-brand {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  border: none;
+}
+.nav-brand:hover { border: none; }
+.nav-links { display: flex; gap: 1.8rem; list-style: none; }
+.nav-links a {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 400;
+  border: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--ink); border: none; }
+.nav-links a.active { color: var(--accent); }
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  margin: 5px 0;
+  transition: 0.3s;
+}
+
+/* ── Article layout ── */
+.essay-page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+}
+.essay-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 3rem;
+  border: none;
+  transition: color 0.3s;
+}
+.essay-back:hover { color: var(--accent); border: none; }
+.essay-back svg { width: 14px; height: 14px; }
+
+.essay-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.essay-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.essay-meta-date {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.essay-meta-topic {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.essay-meta-sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--rule);
+}
+.essay-page-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.essay-body p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+.essay-body p:first-of-type::first-letter {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.1rem;
+  margin-top: 0.05rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+.essay-body h2 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 3rem 0 1.5rem;
+  line-height: 1.3;
+}
+.essay-body h2:first-of-type { margin-top: 2rem; }
+.essay-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.essay-body em {
+  font-family: var(--serif);
+  font-style: italic;
+}
+.essay-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2rem 0;
+}
+.essay-body blockquote p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+.essay-body hr {
+  border: none;
+  height: 1px;
+  background: var(--rule);
+  margin: 3rem 0;
+}
+
+.essay-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.essay-footer-author {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+.essay-footer-back {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+.essay-footer-back:hover { border-bottom-width: 2px; }
+
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+footer .colophon {
+  font-family: var(--serif);
+  font-style: italic;
+  margin-top: 0.4rem;
+  color: var(--rule);
+}
+
+@media (max-width: 768px) {
+  html { font-size: 16px; }
+  .essay-page { padding: 6rem 1.5rem 3rem; }
+  .nav-inner { padding: 0.7rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 1.5rem;
+    gap: 0.8rem;
+  }
+  .nav-toggle { display: block; }
+  .essay-footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">A. Orejarena</a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#essays" class="active">Essays</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article class="essay-page">
+  <a href="../index.html#essays" class="essay-back">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+    Back to Essays
+  </a>
+
+  <header class="essay-header">
+    <div class="essay-meta">
+      <span class="essay-meta-date">2025</span>
+      <span class="essay-meta-sep"></span>
+      <span class="essay-meta-topic">Epistemology × Biology</span>
+    </div>
+    <h1 class="essay-page-title">Todo lo dicho es dicho por alguien — Sobre la imposibilidad de separar autor y obra</h1>
+  </header>
+
+  <div class="essay-body">
+
+    <p>Últimamente nos encontramos con una sensación incómoda: parece justo que una persona que ha cometido una atrocidad —o incluso participado en actividades que rechazamos— no tenga ningún tipo de voz en áreas que consideramos importantes. Pensemos en casos recientes: la cancelación de figuras públicas, el rechazo a teorías científicas o económicas solo porque sus fundadores tuvieron conductas moralmente cuestionables, o incluso la deslegitimación de estados por las acciones de sus líderes. La carrera de algunas figuras internacionales ha entrado en jaque justo por ello.</p>
+
+    <p>La academia y la vida política, sin embargo, nos ha enseñado que esto no responde a un razonamiento serio. Nos pide abandonar estas intuiciones tan pronto como entramos a las esferas públicas y diplomáticas, ya sea en la investigación o en el debate. Se nos dice: "Separa al autor de la obra. Juzga las ideas por sí mismas, no por quién las dice."</p>
+
+    <p>Y sin embargo, esa incomodidad personal con ciertos autores no desaparece por decreto académico.</p>
+
+    <p>La intención de este ensayo recae en esta pregunta: ¿Es realmente razonable abandonar esa experiencia? ¿O hay algo en ella que merece ser tomado en serio?</p>
+
+    <hr>
+    
+    <h2>Todo lo dicho es dicho por alguien</h2>
+
+    <p>"Todo lo dicho es dicho por alguien" es una de las dos premisas fundamentales que Humberto Maturana y Francisco Varela desarrollan en <em>El árbol del conocimiento</em>, su obra más reconocida. El libro no solo buscaba responder a la pregunta "¿Qué es un ser vivo?", sino también establecer las bases de una nueva epistemología a partir de una interpretación filosófica del funcionamiento del sistema nervioso y sus etapas en el fenómeno del conocimiento humano.</p>
+
+    <p>La premisa hace referencia a cómo todo sistema vivo procesa información según la estructura que ya posee. Cada célula, cada organismo, cada parte de un sistema trae consigo la información necesaria para mantenerse vivo. Y aquí viene el punto crucial: Las distintas formas que tiene un ser vivo para percibir y actuar en el mundo están siempre determinadas por la estructura e información que el mismo contiene.</p>
+
+    <p>Aplicado al conocimiento humano, es decir, a su sistema biológico, esto significa que no existe tal cosa como una observación neutral o una idea que surja de la nada. Todo lo se dice, se piensa o se propone está inevitablemente filtrado por quién es aquel que lo expresa: su historia, sus experiencias, sus límites.</p>
+
+    <p>Ahora bien, ¿qué tiene esto que ver con el problema del autor y la obra?</p>
+
+    <hr>
+
+    <h2>El argumento de autoridad y sus límites</h2>
+
+    <p>Aunque la respuesta parezca con lo anterior intuitiva, el argumento de autoridad siempre fue despreciado en Occidente, donde la relación maestro-discípulo versaba más en competencia que en la nutrición. Y con razón: apelar a la autoridad como única justificación de una idea es una tragedia argumentativa, sino es que una vergüenza pública para algunos. Naturalmente, aunque pensemos que un cardiólogo es la autoridad más fiable para tratar temas del corazón, solo hace falta un poco de investigación —o de esperas en distintos centros médicos— para darse cuenta de la multiplicidad de perspectivas que este tema tiene incluso entre especialistas.</p>
+
+    <p>Esto es propio de cualquier área de cualquier disciplina, de cualquier conocimiento, que se tome en serio por sus integrantes. El terreno de información que surge bajo la etiqueta de "autoridad" es, cuanto menos, inestable. Lleno de incertidumbre que, sobre todo en los ecos de la posmodernidad, damos por sentado.</p>
+
+    <p>Y aun así, aquí está el giro: parece que la solución al problema del argumento de autoridad, o mejor dicho, la evaluación de la información que se nos presenta, no está en ignorar quién lo dice, sino precisamente en conocer mejor a quién lo dice.</p>
+
+    <hr>
+
+    <h2>Autor y obra: un falso dilema</h2>
+
+    <p>Bajo esta perspectiva, el famoso dilema del autor-obra parece, como nuestra experiencia siempre ha intuido, más sencillo de lo que nos han hecho creer: no hay manera de separarlos.</p>
+
+    <p>Este ensayo no pretende negar el hecho de que apelar a una autoridad sigue siendo una justificación pobre si es el único argumento que se tiene. Lo que sí invita al lector es a darse cuenta de que dicha debilidad no está en considerar quién dice algo, sino precisamente en el desconocimiento que tenemos de esa persona. No conocer al autor no nos libera de su influencia en la obra, en lo dicho, en lo negado u omitido; simplemente nos deja ciegos ante ella.</p>
+
+    <p>Ahora bien, es cierto que muchos de nosotros consideramos esto insostenible en las prácticas contemporáneas de política. Más temprano que tarde, razonamos: "Si empezamos a juzgar las ideas por quién las dice, caemos en descalificaciones ad hominem, en purgas ideológicas, en la imposibilidad del debate. La democracia puede entrar en jaque." Pero, ¿por qué asumimos que reconocer la unidad autor-obra necesariamente lleva a eso?</p>
+
+    <p>Consideremos lo contrario: ¿acaso el hecho de que las palabras de un político frecuentemente le queden grandes es neutral respecto a su política? ¿No es relevante la coherencia entre lo que alguien dice y lo que hace? Todos nosotros, día a día, al menos en algún lugar de nuestra vida, luchamos con la coherencia. Muchos sabemos y predicamos lo malo de ciertos hábitos, mientras seguimos luchando por deshacernos de ellos; sino es que de otros. Sabemos lo difícil que es vivir de acuerdo con nuestras ideas y nuestro conocimiento. Y es justo por eso que cuando vemos a alguien que predica una cosa y hace la contraria, algo en nosotros se resiste a tomar sus palabras en serio.</p>
+
+    <p>El lector deberá saber que su autor cree firmemente en que esa resistencia no es irracional; Es una forma de honestidad.</p>
+
+    <hr>
+    
+    <h2>Una epistemología más sincera</h2>
+
+    <p>Si los autores están en lo cierto, entonces cada acto de conocimiento es también un acto de autorrevelación. Un testimonio; una confesión. Cuando alguien propone una teoría, no solo nos está hablando del mundo; también nos está hablando de sí mismo, de cómo su particular estructura de vida ha organizado esa información. La obra es inseparable del autor porque la obra es, en cierto sentido, una expresión de esa estructura viviente.</p>
+
+    <p>Esto no significa que debamos rechazar todas las ideas de personas moralmente cuestionables. Significa que debemos ser más cuidadosos, más críticos, más atentos a qué está revelando esa idea sobre quien la propone. Significa reconocer que una teoría económica propuesta por alguien que se enriqueció explotando trabajadores merece un escrutinio distinto al de una teoría propuesta por alguien que vivió las consecuencias de sus propias ideas.</p>
+
+    <p>Lo que esta perspectiva nos invita a hacer es acercarnos a la realidad de una manera más sincera y humilde. A no tratar las ideas como objetos flotando en un vacío abstracto, separadas de las vidas que las sostienen. A saber que todo lo dicho, antes de ser evaluado como verdadero o falso, es dicho por alguien. Y que ese "alguien" importa.</p>
+
+    <p>No porque ese alguien tenga autoridad incuestionable, sino porque ese alguien es la condición de posibilidad de lo que se está diciendo. La coherencia entre vida y palabra no garantiza la verdad, pero su ausencia sí debería hacernos dudar y animarnos a investigar.</p>
+
+    <p>Al final, quizás el problema no es que no podamos separar autor y obra. En un tiempo donde la tecnología nos ha separado cada vez más de la intimidad con el "otro", del conocimiento del otro, quizás el problema radica en pensar que, quizá por sabernos torpes en hacer acuerdos con los vecinos y amistad con los enemigos, que podíamos hacer tal cosa.</p>
+  </div>
+
+  <div class="essay-footer">
+    <span class="essay-footer-author">Alexander Orejarena — Santa Marta, Colombia</span>
+    <a href="../index.html#essays" class="essay-footer-back">All Essays</a>
+  </div>
+</article>
+
+<footer>
+  <div>Alexander Orejarena © 2026 — Santa Marta, Colombia</div>
+  <div class="colophon">Set in Cormorant Garamond &amp; Source Sans. Built with patience.</div>
+</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+});
+</script>
+</body>
+</html>

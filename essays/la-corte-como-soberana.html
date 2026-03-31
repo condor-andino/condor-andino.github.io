@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Corte como soberana — Alexander Orejarena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --paper: #2b2a31;
+  --paper-light: #33323a;
+  --ink: #D3DAD9;
+  --ink-soft: #b0b5b4;
+  --ink-muted: #7e8382;
+  --accent: #a08080;
+  --accent-light: #b89a9a;
+  --accent-bg: rgba(160, 128, 128, 0.1);
+  --rule: #44444E;
+  --rule-light: #3d3c45;
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Source Sans 3', 'Helvetica Neue', sans-serif;
+  --measure: 720px;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 17px;
+  background: var(--paper);
+}
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+a:hover { border-bottom-color: var(--accent); }
+
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 1px 16px rgba(0,0,0,0.25); }
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-brand {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  border: none;
+}
+.nav-brand:hover { border: none; }
+.nav-links { display: flex; gap: 1.8rem; list-style: none; }
+.nav-links a {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 400;
+  border: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--ink); border: none; }
+.nav-links a.active { color: var(--accent); }
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  margin: 5px 0;
+  transition: 0.3s;
+}
+
+/* ── Article layout ── */
+.essay-page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 8rem 2rem 5rem;
+}
+.essay-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 3rem;
+  border: none;
+  transition: color 0.3s;
+}
+.essay-back:hover { color: var(--accent); border: none; }
+.essay-back svg { width: 14px; height: 14px; }
+
+.essay-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.essay-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.essay-meta-date {
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.essay-meta-topic {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.essay-meta-sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--rule);
+}
+.essay-page-title {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.essay-body p {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+}
+.essay-body p:first-of-type::first-letter {
+  font-family: var(--serif);
+  font-size: 3.2rem;
+  float: left;
+  line-height: 1;
+  margin-right: 0.1rem;
+  margin-top: 0.05rem;
+  color: var(--ink);
+  font-weight: 700;
+}
+.essay-body h2 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 3rem 0 1.5rem;
+  line-height: 1.3;
+}
+.essay-body h2:first-of-type { margin-top: 2rem; }
+.essay-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.essay-body em {
+  font-family: var(--serif);
+  font-style: italic;
+}
+.essay-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2rem 0;
+}
+.essay-body blockquote p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+.essay-body hr {
+  border: none;
+  height: 1px;
+  background: var(--rule);
+  margin: 3rem 0;
+}
+
+.essay-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.essay-footer-author {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+.essay-footer-back {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+.essay-footer-back:hover { border-bottom-width: 2px; }
+
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+footer .colophon {
+  font-family: var(--serif);
+  font-style: italic;
+  margin-top: 0.4rem;
+  color: var(--rule);
+}
+
+@media (max-width: 768px) {
+  html { font-size: 16px; }
+  .essay-page { padding: 6rem 1.5rem 3rem; }
+  .nav-inner { padding: 0.7rem 1.5rem; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0; right: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 1rem 1.5rem;
+    gap: 0.8rem;
+  }
+  .nav-toggle { display: block; }
+  .essay-footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">A. Orejarena</a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#essays" class="active">Essays</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article class="essay-page">
+  <a href="../index.html#essays" class="essay-back">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3L5 8l5 5"/></svg>
+    Back to Essays
+  </a>
+
+  <header class="essay-header">
+    <div class="essay-meta">
+      <span class="essay-meta-date">2026</span>
+      <span class="essay-meta-sep"></span>
+      <span class="essay-meta-topic">Constitutional law</span>
+    </div>
+    <h1 class="essay-page-title">La Corte como soberana — Crítica al control de constitucionalidad desde los Critical Legal Studies</h1>
+  </header>
+
+  <div class="essay-body">
+
+    <p>En diciembre de 2025, el presidente de Colombia firmó un decreto de emergencia económica horas antes de que comenzara la vacancia judicial. El Congreso había hundido su reforma tributaria. El ejecutivo, acorralado, recurrió al único instrumento que le quedaba: gobernar por decreto. La Corte Constitucional, semanas después, hizo algo que no había hecho en décadas: suspendió provisionalmente el decreto. El presidente acusó a la Corte de prejuzgar. La Corte acusó al presidente de eludir el control constitucional. Ambos invocaron la Constitución. Ambos hablaron en nombre del pueblo.</p>
+
+    <p>Nadie le preguntó al pueblo.</p>
+
+    <p>Meses antes, la misma Corte había suspendido la reforma pensional por vicios de trámite. El gobierno denunció sabotaje institucional. La oposición celebró la defensa del Estado de Derecho. Nueve magistrados —no electos popularmente, no removibles por voto, formados en las mismas facultades de élite— decidieron el destino de tres millones de adultos mayores. La Constitución los autorizaba. La democracia, en algún sentido práctico y profundo, no.</p>
+
+    <p>¿Qué revela este espectáculo? No una anomalía. No un gobierno irresponsable ni una corte valiente. Revela algo más incómodo: la contradicción fundacional del constitucionalismo colombiano. Una Constitución que proclama la soberanía popular en su primer artículo y deposita la última palabra en un tribunal. Un sistema que dice confiar en el pueblo pero construye, con meticulosa ingeniería jurídica, mecanismos para que el pueblo no decida.</p>
+
+    <p>Este ensayo no pretende defender al presidente contra la Corte ni a la Corte contra el presidente. Esa trampa binaria —elegir entre el caudillo y el tribunal— es precisamente el síntoma de lo que está roto del país. Lo que pretende es algo más radical y, por eso mismo, más incómodo: preguntarse si el control de constitucionalidad, tal como opera en Colombia, es una garantía democrática o un mecanismo de gobierno judicial que sustituye la deliberación popular por la interpretación de una élite letrada.</p>
+
+    <p>La tradición desde la cual se formula esta pregunta tiene nombre: Critical Legal Studies. Y su tesis central, una que el constitucionalismo colombiano ha preferido ignorar, es devastadoramente simple: todo derecho es política.</p>
+
+    <hr>
+
+    <h2>II. La desmitificación</h2>
+
+    <p>Hay una premisa que el constitucionalismo contemporáneo trata como axioma: los jueces aplican el derecho; no lo crean. El acto de juzgar es, bajo esta luz, un acto técnico. El juez constitucional lee la Constitución, interpreta su texto, aplica sus principios, y produce un fallo que no es suyo sino del ordenamiento jurídico. El juez no quiere nada. No tiene ideología. No tiene clase social. No tiene historia. Es un sacerdote del texto.</p>
+
+    <p>Los Critical Legal Studies demolieron esta ficción.</p>
+
+    <p>Duncan Kennedy, en su obra de madurez, mostró que la adjudicación judicial es un acto irreductiblemente político. No porque los jueces sean corruptos o parcializados —aunque en ocasiones no sea un secreto para nadie—, sino por algo más profundo: el material jurídico del que disponen —textos constitucionales, precedentes, principios, valores— es lo suficientemente vago, contradictorio y denso como para sostener resultados opuestos en casi cualquier caso importante. Lo que determina el fallo no es "el derecho" sino la estructura ideológica del juez: sus supuestos sobre la propiedad, la libertad, la igualdad, el orden social. Supuestos que permanecen ocultos bajo el lenguaje de la neutralidad técnica.</p>
+
+    <p>¿Qué significa esto para el control de constitucionalidad? Significa que cuando un tribunal declara inconstitucional una ley aprobada por un congreso electo, no está "protegiendo la Constitución" en ningún sentido mecánico. Está eligiendo, entre múltiples lecturas posibles del texto constitucional, aquella que refleja sus preferencias. Y al hacerlo, está ejerciendo poder político —poder de veto, poder de agenda, poder de definición del orden social— sin mandato electoral, sin rendición de cuentas, sin posibilidad de ser removido por el pueblo cuyos derechos dice proteger.</p>
+
+    <p>Jeremy Waldron formuló el argumento filosófico más riguroso contra esta arquitectura de la siguiente manera: En una sociedad que toma los derechos en serio y tiene instituciones democráticas funcionales, argumentó, no hay razón para suponer que los jueces protegerán mejor los derechos que las legislaturas. El desacuerdo sobre qué significan los derechos es la condición normal de la política, no una patología. Someter esos desacuerdos a la decisión de jueces en lugar de a procesos mayoritarios es una afrenta al autogobierno colectivo.</p>
+
+    <p>El constitucionalista responderá: pero Colombia no tiene instituciones democráticas funcionales. El Congreso es clientelista, corrupto, capturado por élites económicas. ¿No necesitamos, precisamente por eso, un tribunal que proteja los derechos?</p>
+
+    <p>La respuesta de los CLS es incómoda. Sí, el Congreso podría ser todo eso. Pero la Corte también está formada dentro de esas mismas élites. Magistrados reclutados por los mismos mecanismos políticos, educados en las mismas universidades, operando con los mismos marcos ideológicos que critican. La independencia judicial, bajo esta lectura, no es una realidad institucional sino una ficción funcional al poder.</p>
+
+    <p>Una ficción necesaria para que el status-quo se vista de derecho.</p>
+
+    <p>Roberto Mangabeira Unger, cofundador de los CLS, lo dijo con aún más claridad: el formalismo jurídico es una mistificación que presenta como necesarias relaciones de poder contingentes. Las constituciones no son pactos sagrados. Son cristalizaciones de relaciones de fuerza que pueden —y deben— ser transformadas.</p>
+
+    <p>Tratar la Constitución como un texto sagrado cuya interpretación solo pueden realizar los iniciados es, en el fondo, una forma sofisticada de autoritarismo.</p>
+
+    <p>¿Y Colombia? Diego López Medina —cuya tesis doctoral fue prologada, no por accidente, por Duncan Kennedy— demostró que la teoría jurídica en América Latina no es una recepción pura de las teorías producidas en el Norte Global. Es una teoría impura: mestiza, contextual, transformada en el tránsito.</p>
+
+    <p>Cuando la Corte Constitucional colombiana aplica doctrinas elaboradas en Harvard o en los tribunales europeos, esas doctrinas adquieren significados y funciones políticas distintas a las originales. El proceso de traducción no es técnico. Es político. Y nadie vigila a tales traductores.</p>
+
+    <hr>
+
+    <h2>III. La Corte detrás del velo</h2>
+
+    <p>Consideremos tres momentos en los que la Corte Constitucional colombiana ejerció algo que, despojado de su lenguaje técnico, solo puede llamarse soberanía.</p>
+
+    <p><strong>La doctrina de sustitución.</strong> En 2003, mediante la Sentencia C-551, la Corte se arrogó la competencia de determinar si una reforma constitucional aprobada por el Congreso "sustituye" la Constitución. No la modifica, no la reforma: la sustituye. Es decir, la Corte decidió que puede evaluar no solo la forma sino la sustancia de las reformas constitucionales, determinando si alteran los "elementos esenciales" de la carta. La pregunta que nadie hizo entonces —y que sigue sin responderse— es delatante: ¿quién autorizó a ocho magistrados a definir cuáles son los "elementos esenciales" de una Constitución que fue redactada por una Asamblea Constituyente? ¿Dónde están escritos esos elementos? En ningún artículo. En ningún acta. Están en la cabeza de los magistrados. La doctrina de sustitución no es un límite al poder de reforma. Es un acto de soberanía judicial encubierta. La Corte se convierte, silenciosamente, en poder constituyente permanente.</p>
+
+    <p>En 2010, con la Sentencia C-141, la Corte usó esta misma doctrina para impedir un referendo que buscaba permitir la segunda reelección presidencial. El resultado fue celebrado por la mayoría del espectro político: Álvaro Uribe no debía perpetuarse en el poder. Pero el mecanismo es lo que importa. Un tribunal no electo impidió que el pueblo votara. No porque la Constitución lo prohibiera explícitamente —no lo hacía—, sino porque la Corte decidió que la reelección indefinida "sustituía" un principio esencial. ¿Cuál principio? El que la Corte dijo que era esencial. La circularidad es perfecta. Y políticamente invisible.</p>
+
+    <p><strong>Los estados de cosas inconstitucionales.</strong> En 2004, con la Sentencia T-025, la Corte declaró un "estado de cosas inconstitucional" respecto al desplazamiento forzado y se erigió en directora de política pública: ordenó al ejecutivo crear programas, asignar presupuestos, reportar avances. Durante más de una década, un tribunal dictó la política de atención a víctimas del conflicto armado. Nadie votó por esa política. Nadie pudo modificarla en elecciones. ¿Fue necesaria? Probablemente; Las víctimas del desplazamiento merecían una respuesta que el ejecutivo y el legislativo no estaban dando. Pero "necesario" y "democrático" no son sinónimos. Y confundir ambos es precisamente el gesto disfuncional que los CLS denuncian.</p>
+
+    <p><strong>La crisis de 2025.</strong> La suspensión provisional del decreto de emergencia económica y la suspensión de la reforma pensional son la expresión más reciente —y quizás más cruda— de este patrón. En el caso de la emergencia, la Corte utilizó una figura cautelar inédita en el control automático de los estados de excepción. La Presidencia acusó al tribunal de inventar competencias. El tribunal respondió que actuaba para prevenir daños irreparables. El argumento jurídico es, como siempre, sofisticado. Pero la pregunta política es simple: ¿quién decide cuándo hay una emergencia? ¿El presidente electo o nueve magistrados? ¿Y quién decide quién decide?</p>
+
+    <p>Daniel Brinks y Abby Blass han mostrado que el empoderamiento judicial en América Latina no es un triunfo del Estado de derecho. Es el resultado de cálculos estratégicos de élites políticas que delegan poder a las cortes cuando les conviene. Las élites económicas que no logran imponer su agenda en el Congreso la canalizan a través de las cortes. Los partidos de oposición que pierden en las urnas litigan ante los tribunales. La Corte no es un árbitro neutral. Es una arena más donde se disputa el poder. Solo que en esta arena, las reglas las ponen los jugadores que tienen título de abogado.</p>
+
+    <p>Sandra Botero planteó la pregunta que la academia colombiana ha evitado con elegancia: ¿han sido las cortes latinoamericanas agentes del neo-liberalismo más que guardianas de derechos? Las preferencias jurídicas de los magistrados moldean la protección de derechos en una dirección que no siempre es progresista. A veces la Corte protege a las víctimas. A veces protege a los bancos. Pero en ambos casos, lo hace sin mandato electoral.</p>
+
+    <hr>
+
+    <h2>IV. La domesticación</h2>
+
+    <p>Añadamos lo siguiente.</p>
+
+    <p>Un argumento que los defensores del activismo judicial presentan como su mejor carta: la tutela. Millones de colombianos han accedido a servicios de salud, educación y vivienda a través de esta herramienta. La Corte Constitucional ha sido, en muchos sentidos, la institución más receptiva a las demandas de los sectores más vulnerables. ¿Cómo criticar eso?</p>
+
+    <p>No con la negación. Negarlo sería deshonesto. Pero haciendo una pregunta distinta: ¿qué le ha costado a la democracia colombiana que la vía para obtener derechos sea un juzgado y no la movilización política?</p>
+
+    <p>La judicialización de la política tiene un efecto perverso que rara vez se discute: despolitiza la lucha social. Cuando un ciudadano obtiene su tratamiento médico por tutela, resuelve su problema individual. Pero no transforma el sistema de salud. No construye poder colectivo. No participa en la deliberación sobre cómo debe organizarse la distribución de estos recursos. Gana un caso. Pierde una ciudadanía.</p>
+
+    <p>Roberto Gargarella lo ha señalado con la metáfora más precisa que se ha producido sobre el constitucionalismo latinoamericano: las constituciones de la región reformaron la "sala de estar" —ideales y generosas declaraciones de derechos—, pero dejaron intacta la "sala de máquinas" —la organización del poder. La Corte Constitucional colombiana ha decorado la sala de estar con jurisprudencia brillante sobre igualdad, dignidad y derechos sociales. Pero la sala de máquinas —quién tiene el poder, cómo se distribuye, quién decide sobre los recursos— permanece cerrada. Y la llave la tienen los mismos de siempre.</p>
+
+    <p>Las investigaciones más recientes sugieren confirmar esta intuición. Brinks, Gauri y Shen han argumentado que la superestructura de judicialización —las reformas institucionales y culturales que empoderaron a las cortes— frecuentemente no cumple su promesa. Las cortes empujan políticas más allá de la capacidad estatal y social para sostenerlas, generando un efecto contrario: retroceso. Las sentencias transformadoras se convierten en letra muerta o, peor, en coartadas institucionales: el Estado puede señalar que "ya hay una sentencia" sobre desplazamiento, sobre salud, sobre igualdad, mientras la realidad permanece intacta.</p>
+
+    <p>¿No es esto lo que ha ocurrido en Colombia? La Sentencia T-025 sobre desplazamiento forzado es considerada un hito jurisprudencial global. Veinte años después, el desplazamiento sigue. Los estados de cosas inconstitucionales se declaran, se monitorean, se evalúan en seminarios académicos; La gente sigue desplazada. La tutela es celebrada como mecanismo de inclusión democrática. ¿Pero qué tipo de democracia es aquella en la que un ciudadano solo puede acceder a sus derechos rogándole a un juez?</p>
+
+    <p>La pregunta no es si la tutela ha ayudado a personas concretas. Lo ha hecho. La pregunta es si, al canalizar las demandas sociales hacia los tribunales, se ha debilitado la capacidad de la sociedad para organizarse, protestar, deliberar y decidir colectivamente. La tutela entonces ha funcionado, sí, pero, paradójicamente, como un mecanismo de domesticación de la acción política: resolviendo caso por caso lo que debería resolverse como pueblo.</p>
+
+    <hr>
+
+    <h2>V. Ni el caudillo ni el tribunal</h2>
+
+    <p>Volvamos a diciembre de 2025.</p>
+
+    <p>El presidente Petro invoca la soberanía popular. Dice que el pueblo lo eligió para transformar el país y que la Corte no puede impedirlo. Tiene razón en algo: fue electo. Pero es soberbio —Gaitanista— ignorar que la soberanía popular no se agota en una elección. Un presidente no es el pueblo. Es un mandatario. Y un mandatario que gobierna por decreto de emergencia cuando el Congreso le niega sus proyectos no está ejerciendo la soberanía popular. Está eludiendo la deliberación democrática.</p>
+
+    <p>La Corte invoca la supremacía constitucional. Dice que la Constitución es el límite infranqueable del poder y que ella es la guardiana de ese límite. También tiene razón en algo: el poder necesita límites. Pero cuando esos límites los define, interpreta y los aplica un solo órgano —no electo, no removible, no sometido a control popular—, la supremacía constitucional se convierte en supremacía judicial. Y la supremacía judicial no es democracia.</p>
+
+    <p>Es gobierno de jueces, con otro nombre.</p>
+
+    <p>Desde los Critical Legal Studies, la crisis de 2025 no es un enfrentamiento entre democracia y constitucionalismo. Es un enfrentamiento entre dos formas de concentración del poder, ambas revestidas de legitimidad: la legitimidad electoral del presidente y la legitimidad jurídica de la Corte. Ninguna de las dos es la legitimidad del pueblo deliberando.</p>
+
+    <p>¿Hay alternativas? Sin duda, aunque el constitucionalismo colombiano las ha tratado con la misma mezcla de condescendencia y temor con que trata cualquier idea que amenace su arquitectura.</p>
+
+    <p>Mark Tushnet propuso distinguir entre la "constitución gruesa" —los principios fundamentales que pertenecen al pueblo— y la "constitución delgada" —las reglas técnicas que pueden quedar en manos judiciales—. ¿Quién define los derechos fundamentales? No un tribunal. El pueblo, a través de procesos de deliberación democrática que aún no hemos inventado. Tushnet también propuso modelos de revisión judicial débil, donde las cortes pueden señalar incompatibilidades pero no tienen la última palabra. Los parlamentos pueden responder, corregir, insistir; donde el diálogo institucional sustituye al monólogo judicial.</p>
+
+    <p>Larry Kramer demostró históricamente que la supremacía judicial no fue un mandato del constituyente estadounidense. Fue una conquista de las cortes. Una captura institucional que se normalizó hasta parecer natural. ¿No ha ocurrido lo mismo en Colombia? La Constitución de 1991 no le dio a la Corte el poder de definir la "identidad" de la Constitución. Ese poder se lo tomó la Corte. Y nadie se lo ha disputado.</p>
+
+    <p>Lo que la crisis de 2025 revela no es que Petro tenga razón o que la Corte tenga razón. Revela la insuficiencia de un diseño constitucional que no tiene mecanismos genuinos de deliberación popular sobre el significado del texto en el que se fundamentan. El pueblo colombiano no parece siquiera tener voz institucionalizada en la interpretación de su propia carta. No hay referendos interpretativos. No hay asambleas ciudadanas vinculantes sobre derechos fundamentales. No hay mecanismos de última palabra popular.</p>
+
+    <p>Hay un presidente que dice ser el pueblo. Y una Corte que dice proteger al pueblo. Y un pueblo que mira desde afuera cómo dos instituciones se disputan algo que debería ser suyo.</p>
+
+    <hr>
+
+    <h2>VI.</h2>
+
+    <p>El constitucionalismo colombiano necesita algo que no sabe nombrar porque contradice sus premisas más profundas: una democratización radical de la interpretación constitucional.</p>
+
+    <p>No se trata de abolir la Corte. Abolir la Corte sin transformar la estructura del poder sería entregarle la Constitución al presidente de turno o al Congreso clientelista. El remedio sería peor que la enfermedad. Se trata de algo más difícil: desacralizar la palabra de la Corte sin destruir la idea de límites al poder.</p>
+
+    <p>¿Cómo se haría eso?</p>
+
+    <p>Humildad.</p>
+
+    <p>Reconociendo, primero, lo que los CLS han demostrado: que la interpretación constitucional es un acto político, no técnico. Que cuando la Corte define los "elementos esenciales" de la Constitución o declara un "estado de cosas inconstitucional", está haciendo política. Política sofisticada, erudita, revestida de lenguaje jurídico. Pero política.</p>
+
+    <p>Abriendo, después, la sala de máquinas. La interpretación constitucional no puede seguir siendo monopolio de abogados formados en cinco universidades en un país de más de 50 millones de habitantes. El significado de la Constitución debe ser objeto de deliberación pública: asambleas ciudadanas, jurados constitucionales, mecanismos de respuesta legislativa a los fallos judiciales. No como ornamento participativo —las audiencias públicas que la Corte convoca y cuyos resultados ignora—, sino como contrapeso real al poder judicial.</p>
+
+    <p>Abandonando, por último, la ficción de que los derechos están más seguros en manos de jueces que en manos del pueblo. Esta ficción descansa sobre un supuesto elitista que rara vez se enuncia explícitamente: que el pueblo es peligroso. Que las mayorías son irracionales. Que solo una élite ilustrada puede proteger los derechos. Los CLS no niegan que las mayorías pueden ser opresivas. Pero señalan que las élites judiciales también lo son —de maneras más sutiles, más duraderas y sobre todo, más difíciles de impugnar.</p>
+
+    <p>Todo derecho es política. Y la política, en democracia, debe ser del pueblo. No del presidente. No de la Corte. Del pueblo organizado, deliberante, capaz de aprender, equivocarse y de corregirse. Capaz, sobre todo, de decidir por sí mismo qué significan las palabras que lo constituyen como comunidad política.</p>
+
+    <p>La Constitución de 1991 dice: "La soberanía reside exclusivamente en el pueblo." Treinta y cinco años después, sería hora de tomarse esa frase en serio. No como preámbulo decorativo; Como programa político.</p>
+
+    <p>Porque si hay algo que la crisis colombiana ha demostrado con brutal claridad es esto: cuando un pueblo no decide, otros deciden por él. Y los que deciden siempre tienen nombre, apellido, universidad y, sobre todo, sueldo. Nunca tienen hambre.</p>
+  </div>
+
+  <div class="essay-footer">
+    <span class="essay-footer-author">Alexander Orejarena — Santa Marta, Colombia</span>
+    <a href="../index.html#essays" class="essay-footer-back">All Essays</a>
+  </div>
+</article>
+
+<footer>
+  <div>Alexander Orejarena © 2026 — Santa Marta, Colombia</div>
+  <div class="colophon">Set in Cormorant Garamond &amp; Source Sans. Built with patience.</div>
+</footer>
+
+<script>
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+});
+</script>
+</body>
+</html>
