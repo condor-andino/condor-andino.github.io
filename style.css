@@ -1,18 +1,36 @@
-/* orejarena.org — light (paper) edition.
-   Brand rule: the sienna accent appears only on the hero rule and on hover/focus — nowhere else. */
+/* orejarena.org — the paper edition.
+   Brand rule: the sienna accent appears only on the hero rule and on hover/focus — nowhere else.
+   The dark tokens below are the site's original dark palette, applied automatically
+   when the visitor's system prefers dark. Delete that media block to force light. */
 
 :root {
   --paper: #F2EEE7;
   --paper-raised: #F8F5EF;
   --ink: #2E2B28;
   --ink-soft: #4E4A44;
-  --muted: #7A756B;
-  --warm: #715A5A;
+  --muted: #6E695F;
+  --warm-ink: #715A5A;
+  --warm-line: #715A5A;
   --rule: #D9D2C4;
   --sienna: #8B3A2F;
   --serif: 'Cormorant Garamond', Georgia, serif;
   --mono: 'IBM Plex Mono', monospace;
   --pad-x: clamp(1.25rem, 4vw, 2rem);
+  --grain-opacity: 0.05;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #37353E;
+    --paper-raised: #3D3B45;
+    --ink: #D3DAD9;
+    --ink-soft: #B4BAB9;
+    --muted: #9BA09F;
+    --warm-ink: #AB9494;
+    --warm-line: #715A5A;
+    --rule: #44444E;
+    --grain-opacity: 0.07;
+  }
 }
 
 html {
@@ -23,10 +41,22 @@ body {
   margin: 0;
   background: var(--paper);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Paper grain — the page as physical document */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection {
-  background: var(--warm);
+  background: #715A5A;
   color: var(--paper);
 }
 
@@ -53,7 +83,7 @@ body {
   position: absolute;
   top: -100%;
   left: var(--pad-x);
-  z-index: 10;
+  z-index: 60;
   padding: 0.6rem 1rem;
   background: var(--ink);
   color: var(--paper);
@@ -119,7 +149,7 @@ body {
   font-size: 0.68rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 0 0 2.4rem;
   animation: hero-in 0.9s ease both;
 }
@@ -150,7 +180,8 @@ body {
   height: 2px;
   background: var(--sienna);
   margin: 0 0 2.4rem;
-  animation: hero-in 0.9s ease 0.45s both;
+  transform-origin: left;
+  animation: rule-in 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.45s both;
 }
 
 .hero-intro {
@@ -160,39 +191,80 @@ body {
   line-height: 1.75;
   color: var(--ink-soft);
   margin: 0;
+  text-wrap: pretty;
   animation: hero-in 0.9s ease 0.6s both;
 }
 
-/* ── Sections ── */
+/* ── Sections: mobile head, wide-screen marginalia ── */
 
 .section {
   padding-top: clamp(3.5rem, 9vh, 6rem);
   padding-bottom: clamp(3.5rem, 9vh, 6rem);
+  scroll-margin-top: 1.2rem;
 }
 .section-last {
   padding-bottom: clamp(4rem, 10vh, 7rem);
 }
 
-.section-head {
+.section-marker {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1rem;
   margin: 0 0 1.6rem;
 }
-.section-head h2 {
+.section-no {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--warm-ink);
+  margin: 0;
+}
+.section-marker h2 {
   font-family: var(--mono);
   font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 0;
 }
-.section-head::after {
+.section-marker::after {
   content: '';
   flex: 1;
   height: 1px;
   background: var(--rule);
+}
+
+@media (min-width: 1080px) {
+  .section {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    column-gap: 2.5rem;
+  }
+  .section-marker {
+    display: block;
+    position: sticky;
+    top: 2.2rem;
+    align-self: start;
+    margin: 0.35rem 0 0;
+  }
+  .section-no {
+    margin: 0 0 0.45rem;
+  }
+  .section-marker::after {
+    content: '';
+    display: block;
+    flex: none;
+    width: 2rem;
+    height: 1px;
+    margin-top: 1.1rem;
+    background: var(--rule);
+  }
+  .section-body {
+    grid-column: 2;
+    min-width: 0;
+  }
 }
 
 .lede {
@@ -203,8 +275,10 @@ body {
   color: var(--ink);
   margin: 0 0 2rem;
   max-width: 680px;
+  text-wrap: balance;
 }
 #research .lede { margin-bottom: 2.2rem; }
+#constellation .lede { margin-bottom: 2.2rem; }
 #essays .lede { margin-bottom: 2.4rem; }
 #correspondence .lede { margin-bottom: 1.6rem; }
 
@@ -239,7 +313,7 @@ body {
   font-size: 0.64rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 0 0 1rem;
 }
 
@@ -250,6 +324,7 @@ body {
   line-height: 1.3;
   color: var(--ink);
   margin: 0 0 1rem;
+  text-wrap: pretty;
 }
 
 .doc-abstract {
@@ -270,13 +345,38 @@ body {
   text-transform: uppercase;
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--warm);
+  border-bottom: 1px solid var(--warm-line);
   padding-bottom: 2px;
 }
 .doc-link:hover,
 .doc-link:focus-visible {
   color: var(--sienna);
   border-bottom-color: var(--sienna);
+}
+
+/* ── Constellation ── */
+
+.constellation-figure {
+  margin: 0;
+  border: 1px solid var(--rule);
+  background: var(--paper-raised);
+}
+
+.constellation-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(340px, 55vh, 520px);
+  cursor: default;
+  touch-action: pan-y; /* node drag must not trap page scroll on touch */
+}
+
+.constellation-caption {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 0.75rem clamp(1rem, 2.5vw, 1.4rem);
+  border-top: 1px solid var(--rule);
 }
 
 /* ── Essays ── */
@@ -322,7 +422,7 @@ body {
   font-family: var(--mono);
   font-size: 0.64rem;
   letter-spacing: 0.08em;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 0 0 1rem;
 }
 
@@ -340,14 +440,14 @@ body {
   font-style: italic;
   font-size: 1.05rem;
   line-height: 1.7;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 2.4rem 0 0;
   max-width: 620px;
 }
 .substack-note a {
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--warm);
+  border-bottom: 1px solid var(--warm-line);
   padding-bottom: 1px;
 }
 .substack-note a:hover,
@@ -378,7 +478,7 @@ body {
   letter-spacing: 0.06em;
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--warm);
+  border-bottom: 1px solid var(--warm-line);
   padding-bottom: 2px;
 }
 .contact-links a:hover,
@@ -387,30 +487,41 @@ body {
   border-bottom-color: var(--sienna);
 }
 
-/* ── Footer & zamuro vigil ── */
+/* ── Shared prose niceties ── */
+
+.trajectory-grid p,
+.doc-abstract,
+.essay-excerpt,
+.contact-prose {
+  font-variant-numeric: oldstyle-nums;
+  text-wrap: pretty;
+}
+
+/* ── Footer & the zamuro vigil, perched on the footer line ── */
 
 .site-footer {
+  position: relative;
   border-top: 1px solid var(--rule);
 }
 
-.vigil {
-  display: flex;
-  justify-content: center;
-  padding: 2.2rem 0 0;
-}
-
 .vigil-mark {
-  color: var(--warm);
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -26px);
+  pointer-events: none;
   opacity: 0;
-  transition: opacity 2.4s ease;
+  color: var(--warm-line);
+  transition: opacity 2.4s ease, transform 2.4s ease;
 }
 .vigil-mark.visible {
   opacity: 1;
+  transform: translate(-50%, -14px);
 }
 
 .footer-inner {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 2.2rem;
+  padding-bottom: 2.2rem;
   text-align: center;
 }
 
@@ -426,15 +537,20 @@ body {
   font-family: var(--serif);
   font-style: italic;
   font-size: 0.9rem;
-  color: var(--warm);
+  color: var(--warm-ink);
   margin: 0;
 }
 
-/* ── Motion ── */
+/* ── Motion: one orchestrated moment on load, then stillness ── */
 
 @keyframes hero-in {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rule-in {
+  from { opacity: 0; transform: scaleX(0); }
+  to   { opacity: 1; transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -445,4 +561,12 @@ body {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* ── Print ── */
+
+@media print {
+  body::before { display: none; }
+  .skip-link, .site-nav { display: none; }
+  .vigil-mark { opacity: 1; }
 }
