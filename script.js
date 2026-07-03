@@ -111,11 +111,12 @@
 
   function layoutCenters() {
     centers.length = 0;
-    var rx = width * 0.24, ry = height * 0.24;
+    // weighted right of center so the map thins out behind the hero text
+    var cx = width * 0.6, rx = width * 0.3, ry = height * 0.28;
     for (var c = 0; c < CLUSTERS; c++) {
       var ang = (c / CLUSTERS) * Math.PI * 2 + 0.6;
       centers.push({
-        x: width / 2 + Math.cos(ang) * rx,
+        x: cx + Math.cos(ang) * rx,
         y: height / 2 + Math.sin(ang) * ry
       });
     }
@@ -183,7 +184,7 @@
     links.forEach(function (l) {
       var on = focus && (l.a === focusIndex || l.b === focusIndex);
       ctx.strokeStyle = on ? rgba(palette.warm, 0.85)
-        : rgba(palette.line, focus ? 0.35 : 0.9);
+        : rgba(palette.line, focus ? 0.28 : 0.75);
       ctx.lineWidth = on ? 1.2 : 1;
       ctx.beginPath();
       ctx.moveTo(nodes[l.a].x, nodes[l.a].y);
@@ -192,13 +193,13 @@
     });
 
     nodes.forEach(function (n, i) {
-      var fill = n.anchor ? rgba(palette.sienna, 0.95)
-        : n.warm ? rgba(palette.warm, 0.75)
-        : rgba(palette.ink, 0.3);
+      var fill = n.anchor ? rgba(palette.sienna, 0.8)
+        : n.warm ? rgba(palette.warm, 0.55)
+        : rgba(palette.ink, 0.22);
       if (focus) {
         if (i === focusIndex) fill = rgba(palette.ink, 0.95);
         else if (neigh.indexOf(i) !== -1) fill = n.anchor ? rgba(palette.sienna, 0.95) : rgba(palette.warm, 0.9);
-        else fill = n.anchor ? rgba(palette.sienna, 0.4) : rgba(palette.ink, 0.12);
+        else fill = n.anchor ? rgba(palette.sienna, 0.35) : rgba(palette.ink, 0.1);
       }
       ctx.fillStyle = fill;
       ctx.beginPath();
