@@ -311,11 +311,6 @@
     window.addEventListener('resize', function () { resize(); wake(0.2); });
   }
 
-  var scheme = window.matchMedia('(prefers-color-scheme: dark)');
-  if (scheme.addEventListener) {
-    scheme.addEventListener('change', function () { readPalette(); draw(); });
-  }
-
   readPalette();
   resize();
   wake(0.3);
